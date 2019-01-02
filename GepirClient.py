@@ -13,7 +13,7 @@ class GepirClient(Client):
     def __init__(self):
         self.requester_gln = '2000000007601'
         GEPIR_WSDL = 'http://gepir.gs1ru.org/GEPIR40/Gepir4xService?wsdl'
-        cache = SqliteCache(path='sqlite.db', timeout=60)
+        cache = SqliteCache(path='cache.db', timeout=60)
         transport = Transport(cache=cache)
         plugins = []
         plugins.append(HistoryPlugin())
@@ -63,7 +63,7 @@ class GepirClient(Client):
         try:
             response = self.service.getKeyLicensee(value_, _soapheaders=[header_value])
         except XMLParseError:
-            print('Error', value)
+            print('Error processing response:', value)
             response = namedtuple('ComplexType', ['body'])
             response.body = [self._get_type('getKeyLicenseeResponse')]
         return response
